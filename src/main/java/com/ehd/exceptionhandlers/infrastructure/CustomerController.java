@@ -25,7 +25,7 @@ public class CustomerController {
 
     @GetMapping("/getCustomersByType/{type}")
     public List<Customer> getCustomersBytype(@PathVariable String type) {
-        List<Customer> filter = customers.stream().filter(custom -> custom.getType().equals(type))
+        List<Customer> filter = customers.stream().filter(custom -> custom.getCustomerType().equals(type))
                 .collect(Collectors.toList());
 
         return Optional.of(filter)

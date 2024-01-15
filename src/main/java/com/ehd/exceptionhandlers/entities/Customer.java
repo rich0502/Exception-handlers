@@ -1,5 +1,6 @@
 package com.ehd.exceptionhandlers.entities;
 
+import com.ehd.exceptionhandlers.validation.ValidateCustomerType;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,8 @@ public class Customer {
     @NotBlank(message = "name shouldn't be null or Empty")
     private String name;
     // @Pattern(regexp = [A-Za-z0-9])
-    private String type;
+    @ValidateCustomerType
+    private String customerType;
     @Min(value = 499, message = "price shouldn't be less than 499")
     @Max(value = 100000, message = "price shouldn't be exceed more than 100000")
     private double price;
