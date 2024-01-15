@@ -3,6 +3,7 @@ package com.ehd.exceptionhandlers.infrastructure;
 import com.ehd.exceptionhandlers.entities.Customer;
 import com.ehd.exceptionhandlers.exception.CustomerNotFoundException;
 import com.ehd.exceptionhandlers.exception.DupicateCustomerException;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,12 +15,12 @@ import java.util.stream.Collectors;
 public class CustomerController {
 
     List<Customer> customers = List.of(
-            new Customer(UUID.randomUUID().toString(), "Table", "Meuble", 2000.0),
-            new Customer(UUID.randomUUID().toString(), "Phone", "Electronics", 500.0),
-            new Customer(UUID.randomUUID().toString(), "Ecran", "Computer", 100.0),
-            new Customer(UUID.randomUUID().toString(), "clavier", "Computer", 500.0),
-            new Customer(UUID.randomUUID().toString(), "Souris", "Computer", 600.0),
-            new Customer(UUID.randomUUID().toString(), "Chargeur", "Computer", 700.0)
+            new Customer(UUID.randomUUID().toString(), "Table", "Meuble", 2000.0, 2.0),
+            new Customer(UUID.randomUUID().toString(), "Phone", "Electronics", 500.0, 7.0),
+            new Customer(UUID.randomUUID().toString(), "Ecran", "Computer", 500.0,1.0),
+            new Customer(UUID.randomUUID().toString(), "clavier", "Computer", 500.0, 5.0),
+            new Customer(UUID.randomUUID().toString(), "Souris", "Computer", 600.0, 8.0),
+            new Customer(UUID.randomUUID().toString(), "Chargeur", "Computer", 700.0, 74.0)
     );
 
     @GetMapping("/getCustomersByType/{type}")
@@ -33,7 +34,7 @@ public class CustomerController {
     }
 
     @PostMapping("/saveCustomer")
-    public Customer saveCustomer(@RequestBody Customer ctm) {
+    public Customer saveCustomer(@RequestBody @Valid Customer ctm) {
         boolean exist = customers.stream().anyMatch(customer -> customer.getId().equals(ctm.getId()));
         if(exist){
             throw new DupicateCustomerException("Customer already exist " + ctm.getId());
