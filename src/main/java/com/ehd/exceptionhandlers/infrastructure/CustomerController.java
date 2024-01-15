@@ -2,9 +2,8 @@ package com.ehd.exceptionhandlers.infrastructure;
 
 import com.ehd.exceptionhandlers.entities.Customer;
 import com.ehd.exceptionhandlers.exception.CustomerNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import com.ehd.exceptionhandlers.exception.DupicateCustomerException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,5 +30,15 @@ public class CustomerController {
         return Optional.of(filter)
                 .filter(customer -> !customer.isEmpty())
                 .orElseThrow(() -> new CustomerNotFoundException("Product not available for the type " + type));
+    }
+
+    @PostMapping("/saveCustomer")
+    public Customer saveCustomer(@RequestBody Customer ctm) {
+        boolean exist = customers.stream().anyMatch(customer -> customer.getId().equals(ctm.getId()));
+        if(exist){
+            throw new DupicateCustomerException("Customer already exist " + ctm.getId());
+        }
+        ctm.setId(UUID.randomUUID().toString());
+        return ctm;
     }
 }
